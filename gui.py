@@ -7,12 +7,18 @@ from video_processing import process_video
 from yolo_detection import detect_people
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.animation as animation
 
 class VideoAnalyzerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Crowd Analysis")
+
+        # Pobranie rozmiaru ekranu i ustawienie okna na pełen ekran w trybie okienkowym
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        self.root.geometry(f"{screen_width}x{screen_height}")  # Ustawienie rozmiaru na pełen ekran
+
+        # Reszta kodu bez zmian...
         
         # Podział okna na lewą i prawą stronę (dwa główne panele)
         self.left_frame = tk.Frame(root)
@@ -20,7 +26,7 @@ class VideoAnalyzerApp:
 
         self.right_frame = tk.Frame(root)
         self.right_frame.pack(side='right', fill='both', expand=True, padx=10, pady=10)
-        
+
         # Podział lewego panelu na górny i dolny panel
         self.left_upper_frame = tk.Frame(self.left_frame)
         self.left_upper_frame.pack(fill='both', expand=True)
