@@ -13,25 +13,54 @@ class VideoAnalyzerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Crowd Analysis")
-
-        # Ramka na przyciski, wykres i wideo
+        
+        # Podział okna na lewą i prawą stronę (dwa główne panele)
         self.left_frame = tk.Frame(root)
-        self.left_frame.pack(side='left', padx=10, pady=10)
+        self.left_frame.pack(side='left', fill='both', expand=True, padx=10, pady=10)
 
         self.right_frame = tk.Frame(root)
-        self.right_frame.pack(side='right', padx=20, pady=10)
+        self.right_frame.pack(side='right', fill='both', expand=True, padx=10, pady=10)
+        
+        # Podział lewego panelu na górny i dolny panel
+        self.left_upper_frame = tk.Frame(self.left_frame)
+        self.left_upper_frame.pack(fill='both', expand=True)
 
-        # Przycisk do otwierania plików wideo
-        self.open_button = tk.Button(self.left_frame, text="Open Video", command=self.open_file)
-        self.open_button.pack(pady=10)
+        self.left_lower_frame = tk.Frame(self.left_frame)
+        self.left_lower_frame.pack(fill='both', expand=True)
 
-        # Etykieta do wyświetlania klatek wideo
-        self.video_label = Label(self.right_frame)
+        # Podział prawego panelu na górny i dolny panel
+        self.right_upper_frame = tk.Frame(self.right_frame)
+        self.right_upper_frame.pack(fill='both', expand=True)
+
+        self.right_lower_frame = tk.Frame(self.right_frame)
+        self.right_lower_frame.pack(fill='both', expand=True)
+
+        # --- Lewa strona ---
+        # Wykres w górnej części lewego panelu
+        self.fig, self.ax = plt.subplots(figsize=(5, 4))
+        self.ax.set_title("People Count Over Time")
+        self.ax.set_xlabel("Frame")
+        self.ax.set_ylabel("People Count")
+        self.line, = self.ax.plot([], [], 'r-')
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.left_upper_frame)
+        self.canvas.get_tk_widget().pack(pady=20, expand=True, fill='both')
+
+        # Dolna część lewego panelu (możesz tu dodać inne statystyki w przyszłości)
+        self.left_lower_label = tk.Label(self.left_lower_frame, text="Additional Info (Placeholder)", font=("Arial", 14))
+        self.left_lower_label.pack(pady=20, expand=True)
+
+        # --- Prawa strona ---
+        # Przycisk do otwierania plików wideo (umieszczony w górnym panelu, nad wideo)
+        self.open_button = tk.Button(self.right_upper_frame, text="Open Video", command=self.open_file)
+        self.open_button.pack(pady=10, anchor="n")
+
+        # Etykieta do wyświetlania klatek wideo (okno wideo pod przyciskiem)
+        self.video_label = Label(self.right_upper_frame)
         self.video_label.pack()
 
-        # Etykieta do wyświetlania licznika klatek pod wideo
-        self.frame_counter_label = Label(self.right_frame, text="0/0", font=("Arial", 14))
-        self.frame_counter_label.pack(pady=10)
+        # Licznik klatek w dolnym panelu (z napisem "Frames:")
+        self.frame_counter_label = Label(self.right_lower_frame, text="Frames: 0/0", font=("Arial", 14))
+        self.frame_counter_label.pack(pady=20)
 
         # Inicjalizacja zmiennych
         self.video_path = None
@@ -41,15 +70,6 @@ class VideoAnalyzerApp:
         self.total_people = 0
         self.fps = 30  # Domyślna liczba klatek na sekundę w wideo
         self.people_count_over_time = []  # Lista do przechowywania liczby osób w czasie
-
-        # Wykres
-        self.fig, self.ax = plt.subplots(figsize=(5, 4))
-        self.ax.set_title("People Count Over Time")
-        self.ax.set_xlabel("Frame")
-        self.ax.set_ylabel("People Count")
-        self.line, = self.ax.plot([], [], 'r-')
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.left_frame)
-        self.canvas.get_tk_widget().pack()
 
     def open_file(self):
         # Umożliwienie użytkownikowi wyboru pliku wideo
@@ -76,7 +96,7 @@ class VideoAnalyzerApp:
     def update_frame_counter(self):
         # Aktualizacja licznika klatek w formacie xxx/yyy
         total_frames = len(self.frames)
-        self.frame_counter_label.config(text=f"{self.current_frame}/{total_frames}")
+        self.frame_counter_label.config(text=f"Frames: {self.current_frame}/{total_frames}")
 
     def update_plot(self):
         # Aktualizacja wykresu
