@@ -19,3 +19,9 @@
     <li><strong>Data Processing and Visualization:</strong> OpenCV, Matplotlib</li>
     <li><strong>Database:</strong> PostgreSQL</li>
 </ul>
+<h2>Future Improvements</h2>
+<ul>
+    <li><strong>Advanced Object Tracking:</strong> Implement SORT or DeepSORT for improved accuracy in crowded scenes.</li>
+    <li><strong>Additional Analysis Metrics:</strong> Include more in-depth statistics, such as participant age and movement tracking.</li>
+    <li><strong>Export Reports:</strong> Enable export of detailed reports in PDF or CSV format for further analysis.</li>
+</ul>
